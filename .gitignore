@@ -1,1 +1,5 @@
 __venv_*__
+build/
+dist/
+figs/
+outfigs/

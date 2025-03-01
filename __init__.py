@@ -9,12 +9,20 @@
 """
 
 from PIL import Image
-import numpy as np
+import glob, os
 
 if __name__ == "__main__":
     # 读取图片
-    background = Image.open("figs/test1.png")
-    former = Image.open("figs/former.png")
-    former = former.resize((background.size[0], background.size[1]))
-    background.paste(former, (0, 0), former)
-    background.save("figs/test_out.png")
+    picture_document_path = input("请输入背景图片文件夹：")
+    former_img_path = input("请输入前景图片路径：")
+    output_path = input("请输入输出图片文件夹：")
+    former = Image.open(former_img_path)
+    for file in glob.glob(picture_document_path + "/**/*.png", recursive=True):
+        background = Image.open(file)
+        former_tmp = former.resize((background.size[0], background.size[1]))
+        background.paste(former_tmp, (0, 0), former_tmp)
+        file_output_path = file.replace(picture_document_path, output_path)
+        if not os.path.exists(os.path.dirname(file_output_path)):
+            os.makedirs(os.path.dirname(file_output_path), exist_ok=True)
+        print(f"导出文件: {file_output_path}")
+        background.save(file.replace(picture_document_path, output_path))
